@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, Field
 
-from model import (
+from data_contracts.model import (
     CSV,
     Api,
     BusinessRules,

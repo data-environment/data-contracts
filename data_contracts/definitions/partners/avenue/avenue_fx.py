@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field, constr
 
-from model import (
+from data_contracts.model import (
     Api,
     BusinessRules,
     CaptureFrequency,
