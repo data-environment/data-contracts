@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import time
 
-from ..general.general import Contact
+from ..general.contact import Contact
 
 
 @dataclass

@@ -13,12 +13,6 @@ from ..transformation.transformation import Transformation
 
 
 @dataclass
-class Contact:
-    name: str
-    contact_emails: list[str]
-
-
-@dataclass
 class General:
     display_name: str
     system_name: str

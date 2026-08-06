@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from enum import Enum
 
-from ..general.general import Contact
+from ..general.contact import Contact
 
 
 class UpdateFrequency(str, Enum):

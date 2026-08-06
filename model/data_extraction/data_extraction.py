@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Literal
 
-from ..general.general import Contact
+from ..general.contact import Contact
 
 
 class CaptureFrequency(str, Enum):

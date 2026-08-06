@@ -21,8 +21,8 @@ from .data_quality.data_quality import (
 from .data_schema.data_schema import DataSchema
 from .data_source.data_source import DataSource, UpdateFrequency
 from .distribution.distribution import Consumer, Distribution
+from .general.contact import Contact
 from .general.general import (
-    Contact,
     DataContract,
     General,
 )
