@@ -17,8 +17,12 @@ class SmartCheck(InserterConfig):
     expected_file_format: FileFormat
 
 
-@dataclass
+BUCKET_BRONZE = "bronze-us-east-1-060791893263"
+
+
+@dataclass(kw_only=True)
 class S3Ingestion:
+    s3_bucket: str = BUCKET_BRONZE
     s3_path: str
     s3_file: str
     inserter: str | InserterConfig
