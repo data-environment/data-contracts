@@ -20,6 +20,54 @@ def validate_max_null_percentage(
     return null_percentage <= percentage
 
 
+def validate_history_sum(
+    column: str,
+    redshift_schema: str,
+    redshift_table: str,
+    date_column: str,
+    current_value: float,
+    variation_multiplier: float = 2,
+) -> str:
+    """Monta a query que valida `current_value` contra o teto/piso esperado.
+
+    teto = PL do mês anterior * (1 + maior variação mensal dos últimos 12 meses * variation_multiplier)
+    piso = PL do mês anterior * (1 - maior variação mensal dos últimos 12 meses * variation_multiplier)
+
+    `current_value` é a soma atual de `column` (calculada por quem chama esta
+    função, a partir do dataframe). A query retorna uma única linha/coluna
+    booleana indicando se `current_value` está dentro do range. Esta função
+    apenas monta e retorna a string SQL — não executa nada, já que a conexão
+    com o Redshift não vive mais neste repositório.
+    """
+    return f"""
+        WITH monthly AS (
+            SELECT
+                DATE_TRUNC('month', {date_column}) AS mes,
+                SUM({column}) AS total
+            FROM {redshift_schema}.{redshift_table}
+            GROUP BY 1
+            ORDER BY 1 DESC
+            LIMIT 13
+        ),
+        variacao AS (
+            SELECT
+                total,
+                ABS(total / NULLIF(LAG(total) OVER (ORDER BY mes), 0) - 1) AS variacao_mensal
+            FROM monthly
+        ),
+        resumo AS (
+            SELECT
+                (SELECT total FROM monthly ORDER BY mes DESC LIMIT 1) AS pl_anterior,
+                (SELECT MAX(variacao_mensal) FROM variacao) AS maior_variacao
+        )
+        SELECT
+            {current_value} BETWEEN
+                pl_anterior * (1 - maior_variacao * {variation_multiplier})
+                AND pl_anterior * (1 + maior_variacao * {variation_multiplier}) AS passou
+        FROM resumo
+        """
+
+
 @dataclass
 class CheckRule:
     description: str

@@ -27,6 +27,7 @@ from data_contracts.model import (
     Sensor,
     SmartCheck,
     Transformation,
+    validate_history_sum,
     validate_max_null_percentage,
 )
 
@@ -256,6 +257,17 @@ POSITIVADOR = DataContract(
                 function=validate_max_null_percentage,
                 column="Status",
                 params={"percentage": 1},
+                action=Action.BLOCK,
+            ),
+            CheckRule(
+                description="Validar se a soma de Net_Em_M1 está dentro do teto/piso esperado, com base na maior variação mensal dos últimos 12 meses.",
+                function=validate_history_sum,
+                column="Net_Em_M1",
+                params={
+                    "redshift_schema": "xp_inc",
+                    "redshift_table": "positivador",
+                    "date_column": "Data_Atualização",
+                },
                 action=Action.BLOCK,
             ),
         ],

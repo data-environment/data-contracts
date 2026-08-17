@@ -21,6 +21,7 @@ from .data_quality.data_quality import (
     CheckRule,
     DataQuality,
     DataQualityCheckFailed,
+    validate_history_sum,
     validate_max_null_percentage,
 )
 from .data_schema.data_schema import DataSchema
@@ -67,4 +68,5 @@ __all__ = [
     "TriggerConfig",
     "UpdateFrequency",
     "validate_max_null_percentage",
+    "validate_history_sum",
 ]
