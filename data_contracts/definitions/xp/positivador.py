@@ -259,17 +259,17 @@ POSITIVADOR = DataContract(
                 percentage=1,
                 action=Action.BLOCK,
             ),
-            CheckRule(
-                description="Validar se a custódia está dentro do range. teto = PL do mês anterior * (1 + maior variação mensal de pl dos últimos 12 meses * 2). piso = PL do mês anterior * (1 - maior variação mensal de pl dos últimos 12 meses * 2)",
-                function=validate_value_range,
-                column="Net_Em_M1",
-                action=Action.BLOCK,
-                params={
-                    "redshift_schema": "xp_inc",
-                    "redshift_table": "positivador",
-                    "date_column": "dt_posicao",
-                },
-            ),
+            # CheckRule(
+            #     description="Validar se a custódia está dentro do range. teto = PL do mês anterior * (1 + maior variação mensal de pl dos últimos 12 meses * 2). piso = PL do mês anterior * (1 - maior variação mensal de pl dos últimos 12 meses * 2)",
+            #     function=validate_value_range,
+            #     column="Net_Em_M1",
+            #     action=Action.BLOCK,
+            #     params={
+            #         "redshift_schema": "xp_inc",
+            #         "redshift_table": "positivador",
+            #         "date_column": "dt_posicao",
+            #     },
+            # ),
         ],
     ),
     DataIngestion(

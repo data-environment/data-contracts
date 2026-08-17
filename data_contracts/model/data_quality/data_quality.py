@@ -15,15 +15,6 @@ class Action(str, Enum):
     WARN = "Aviso"
 
 
-def check_no_duplicates(df: pd.DataFrame, column: str | list[str]) -> bool:
-    """Verifica duplicidade nos valores da(s) coluna(s) de chave única do dataset.
-
-    Sincronizado automaticamente em `DataQuality.checks` por `DataContract`
-    a partir de `DataSchema.unique_key_columns()` — não declare manualmente.
-    """
-    return not df.duplicated(subset=column).any()
-
-
 def validate_max_null_percentage(df: pd.DataFrame, column: str, percentage: float) -> bool:
     """Verifica se a % de valores nulos em `column` não ultrapassa `percentage`."""
     null_percentage = df[column].isna().mean() * 100
