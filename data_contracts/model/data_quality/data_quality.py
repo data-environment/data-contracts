@@ -26,7 +26,6 @@ class CheckRule:
     function: Callable[..., bool]
     column: str | list[str]
     action: Action = Action.BLOCK
-    percentage: float | None = None
     params: dict[str, Any] = field(default_factory=dict)
 
 
@@ -55,10 +54,7 @@ class DataQuality:
         """
         results = []
         for rule in self.checks:
-            kwargs: dict[str, Any] = dict(rule.params)
-            if rule.percentage is not None:
-                kwargs["percentage"] = rule.percentage
-            passed = rule.function(df, column=rule.column, **kwargs)
+            passed = rule.function(df, column=rule.column, **rule.params)
             results.append(CheckResult(rule=rule, passed=passed))
             if passed:
                 continue

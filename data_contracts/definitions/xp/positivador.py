@@ -255,7 +255,7 @@ POSITIVADOR = DataContract(
                 description="Validar se o número de clientes sem Status está dentro do range. vazios ÷ total ≤ 1%",
                 function=validate_max_null_percentage,
                 column="Status",
-                percentage=1,
+                params={"percentage": 1},
                 action=Action.BLOCK,
             ),
         ],
