@@ -22,7 +22,6 @@ from .data_quality.data_quality import (
     DataQuality,
     DataQualityCheckFailed,
     validate_max_null_percentage,
-    validate_value_range,
 )
 from .data_schema.data_schema import DataSchema
 from .data_source.data_source import DataSource, UpdateFrequency
@@ -68,5 +67,4 @@ __all__ = [
     "TriggerConfig",
     "UpdateFrequency",
     "validate_max_null_percentage",
-    "validate_value_range",
 ]
