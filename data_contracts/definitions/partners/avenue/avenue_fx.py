@@ -150,7 +150,7 @@ AVENUE_FX_CONTRACT = DataContract(
     ),
     DataSchema(model=AvenueFxSchema),
     DataQuality(
-        checks={},
+        checks=[],
     ),
     DataIngestion(
         trigger=Schedule(cron="25 20 * * 1-5"),

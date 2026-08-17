@@ -121,7 +121,7 @@ FILE_MODEL_EXAMPLE = DataContract(
     ),
     DataSchema(model=OportunidadesVendaSchema),
     DataQuality(
-        checks={},
+        checks=[],
     ),
     DataIngestion(
         trigger=Schedule(cron="0 3 * * *"),

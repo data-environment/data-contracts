@@ -4,9 +4,11 @@ from pydantic import BaseModel, Field
 
 from data_contracts.model import (
     CSV,
+    Action,
     BusinessRules,
     CaptureFrequency,
     CaptureMethod,
+    CheckRule,
     Consumer,
     Contact,
     DataContract,
@@ -25,6 +27,8 @@ from data_contracts.model import (
     Sensor,
     SmartCheck,
     Transformation,
+    validate_max_null_percentage,
+    validate_value_range,
 )
 
 
@@ -247,14 +251,26 @@ POSITIVADOR = DataContract(
     ),
     DataSchema(model=PositivadorSchema),
     DataQuality(
-        checks={
-            # check_sum_range: {
-            #     "column": "Net_Em_M1",
-            #     "expected_sum": 31_000_000_000,
-            #     "tolerance_warning": 0.2,  # passa com aviso
-            #     "tolerance_block": 0.5,  # bloqueia voce esta maluco
-            # },
-        },
+        checks=[
+            CheckRule(
+                description="Validar se o número de clientes sem Status está dentro do range. vazios ÷ total ≤ 1%",
+                function=validate_max_null_percentage,
+                column="Status",
+                percentage=1,
+                action=Action.BLOCK,
+            ),
+            CheckRule(
+                description="Validar se a custódia está dentro do range. teto = PL do mês anterior * (1 + maior variação mensal de pl dos últimos 12 meses * 2). piso = PL do mês anterior * (1 - maior variação mensal de pl dos últimos 12 meses * 2)",
+                function=validate_value_range,
+                column="Net_Em_M1",
+                action=Action.BLOCK,
+                params={
+                    "redshift_schema": "xp_inc",
+                    "redshift_table": "positivador",
+                    "date_column": "dt_posicao",
+                },
+            ),
+        ],
     ),
     DataIngestion(
         trigger=Sensor(interval=5400),
