@@ -18,4 +18,4 @@ def get_redshift_engine() -> Engine:
     user = os.environ["REDSHIFT_USER"]
     password = os.environ["REDSHIFT_PASS"]
     database = os.environ.get("REDSHIFT_DATABASE", "dw")
-    return create_engine(f"postgresql://{user}:{password}@{host}:{port}/{database}")
+    return create_engine(f"redshift+psycopg2://{user}:{password}@{host}:{port}/{database}")
