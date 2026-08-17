@@ -10,9 +10,6 @@ requires-python = ">=3.12"
 dependencies = [
     "pydantic>=2.13.4",
     "pandas>=2.0.3",
-    "sqlalchemy>=2.0",
-    "sqlalchemy-redshift>=0.8.14",
-    "psycopg2-binary>=2.9",
     "python-dotenv>=1.0.0",
 ]
 
