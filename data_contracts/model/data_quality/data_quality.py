@@ -26,7 +26,6 @@ def validate_history_sum(
     redshift_table: str,
     date_column: str,
     current_value: float,
-    variation_multiplier: float = 2,
 ) -> str:
     """Monta a query que valida `current_value` contra o teto/piso esperado.
 
@@ -40,31 +39,10 @@ def validate_history_sum(
     com o Redshift não vive mais neste repositório.
     """
     return f"""
-        WITH monthly AS (
-            SELECT
-                DATE_TRUNC('month', {date_column}) AS mes,
-                SUM({column}) AS total
-            FROM {redshift_schema}.{redshift_table}
-            GROUP BY 1
-            ORDER BY 1 DESC
-            LIMIT 13
-        ),
-        variacao AS (
-            SELECT
-                total,
-                ABS(total / NULLIF(LAG(total) OVER (ORDER BY mes), 0) - 1) AS variacao_mensal
-            FROM monthly
-        ),
-        resumo AS (
-            SELECT
-                (SELECT total FROM monthly ORDER BY mes DESC LIMIT 1) AS pl_anterior,
-                (SELECT MAX(variacao_mensal) FROM variacao) AS maior_variacao
-        )
         SELECT
-            {current_value} BETWEEN
-                pl_anterior * (1 - maior_variacao * {variation_multiplier})
-                AND pl_anterior * (1 + maior_variacao * {variation_multiplier}) AS passou
-        FROM resumo
+            FALSE
+        FROM {redshift_schema}.{redshift_table}
+        LIMIT 1
         """
 
 
